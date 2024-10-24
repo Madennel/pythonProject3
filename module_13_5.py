@@ -26,11 +26,13 @@ bot = Bot(token=API_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(storage=storage)
 
+
 # Определение группы состояний
 class UserState(StatesGroup):
     age = State()    # Состояние для ввода возраста
-    growth = State() # Состояние для ввода роста
-    weight = State() # Состояние для ввода веса
+    growth = State()  # Состояние для ввода роста
+    weight = State()  # Состояние для ввода веса
+
 
 # Создание клавиатуры с кнопками
 keyboard = ReplyKeyboardMarkup(
@@ -40,6 +42,7 @@ keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
+
 # Обработчик команды /start
 @dp.message(Command(commands=["start"]))
 async def start(message: Message):
@@ -48,11 +51,13 @@ async def start(message: Message):
         reply_markup=keyboard
     )
 
+
 # Функция для начала запроса данных (возраст)
 @dp.message(lambda message: message.text == "Рассчитать")
 async def set_age(message: Message, state: FSMContext):
     await message.answer("Введите свой возраст:")
     await state.set_state(UserState.age)
+
 
 # Обработчик для возраста
 @dp.message(UserState.age)
@@ -62,6 +67,7 @@ async def set_growth(message: Message, state: FSMContext):
     await message.answer("Введите свой рост (в сантиметрах):")
     await state.set_state(UserState.growth)
 
+
 # Обработчик для роста
 @dp.message(UserState.growth)
 async def set_weight(message: Message, state: FSMContext):
@@ -69,6 +75,7 @@ async def set_weight(message: Message, state: FSMContext):
     await state.update_data(growth=message.text)
     await message.answer("Введите свой вес (в килограммах):")
     await state.set_state(UserState.weight)
+
 
 # Обработчик для веса и отправки результата
 @dp.message(UserState.weight)
@@ -91,6 +98,7 @@ async def send_calories(message: Message, state: FSMContext):
 
     # Завершаем машину состояний
     await state.clear()
+
 
 # Запуск бота
 async def main():
