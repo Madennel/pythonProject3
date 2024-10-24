@@ -4,12 +4,23 @@ from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram import Router
+from dotenv import load_dotenv
+import os
 
-api = ""
+# Загружаем переменные окружения из .env файла
+load_dotenv()
+
+# Получаем значение токена из переменной окружения
+API_TOKEN = os.getenv("API_TOKEN")
+
+# Проверяем, что токен загружен корректно
+if API_TOKEN is None:
+    raise ValueError("API токен не найден. Проверьте .env файл.")
+
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(token=api)
+bot = Bot(token=API_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 
 router = Router()
